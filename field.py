@@ -1,5 +1,7 @@
 import pygame
 
+from stars import Star
+
 
 class Field():
 
@@ -104,3 +106,12 @@ class Field():
             pygame.display.update()
 
             pos_x += self.block_margin
+
+
+    def add_Star(self, x, y, colorID):
+        self.matrix[x][y] = Star(colorID, coordsXY(x, y))
+
+
+    @staticmethod
+    coordsXY(x, y):
+

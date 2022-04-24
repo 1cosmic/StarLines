@@ -1,7 +1,7 @@
 import pygame
 import os
 
-from field_copy import Field
+from field import Field
 
 class CLines():
 
@@ -23,6 +23,8 @@ class CLines():
         run = True
         self.mainScreen.blit(self.win_bgrd, (0,0))  # fill background.
         self.field.draw(self.win_size)
+        
+        self
 
         while run:
             # Main cycle of APP.
