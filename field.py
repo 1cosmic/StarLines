@@ -1,14 +1,13 @@
+import random
 import pygame
 
 from stars import Star
 
-
 class Field():
-
     def __init__(self, screen):
         self.screen = screen
         self.matrix = [[0] * 9 for i in range(9)]
-
+        self.free_matrix = [[i] * 9 for i in range(9)]
 
         # Самым оптимальным будет помещение звезды как айдишник в поле выше.
         # Таким образом, обращаясь к определённому индексу в матрице, мы
@@ -43,37 +42,36 @@ class Field():
     def draw_line(self, start_x, start_y):
         """Draw line, who separate to stars."""
 
-        # color = (255, 255, 255)
+        start_x += 2  # set up currect coorditates of first line (bug fix).
 
-        # V_end = start_x + self.block_w + self.space
-        # H_end = start_y + self.block_w + self.space
+        _color = (255, 255, 255)
+        _speed = 10
 
-        # V_line = (V_end, start_y)
-        # H_line = (start_x, H_end)
+        __line_V = [[start_x, start_y], [start_x, start_y]]
+        __line_H = [[start_x, start_y], [start_x, start_y]]
 
-        # while V_end - V_line[0] < self.block_margin:
+        while __line_V[1][1] - __line_V[0][1] < self.line_l:
 
-           # V_end += 1
-           # H_end += 1
+            __line_V[0][0] = start_x
+            __line_H[0][1] = start_y
 
-           # V_line_end = (V_end, start_y)
-           # H_line_end = (start_x, H_end)
+            for i in range(8):
+                __line_V[0][0] += self.block_margin
+                __line_V[1][0] = __line_V[0][0]
 
-           # pygame.draw.line(self.screen, color, V_line, V_line_end, self.line_w)
-           # pygame.draw.line(self.screen, color, H_line, H_line_end, self.line_w)
-           # pygame.display.update()
+                pygame.draw.line(self.screen, _color, __line_V[0], __line_V[1], self.line_w)
+
+                __line_H[0][1] += self.block_margin
+                __line_H[1][1] = __line_H[0][1]
 
 
+                # pygame.display.update()
+                pygame.draw.line(self.screen, _color, __line_H[0], __line_H[1], self.line_w)
 
-        # JOB CODE!
-
-        color = (255, 255, 255)
-
-        # Draw line, who separate of star_block.
-        startPos = (start_x, start_y)
-
-        endPos = (start_x, start_y + height)
-        pygame.draw.line(self.screen, color, startPos, endPos, width)
+            __line_H[1][0] += _speed
+            __line_V[1][1] += _speed
+            pygame.time.delay(10)
+            pygame.display.update()
 
 
     def draw_star(self):
@@ -87,10 +85,15 @@ class Field():
         self.space = 6
 
         self.block_margin = self.block_w + self.space
-        self.line_l = (self.block_margin + self.line_w) * 9
+        self.line_l = self.block_margin * 9
 
         pos_x = (win_size[0] - self.line_l) / 2
         pos_y = (win_size[1] - self.line_l) / 2  # set up start position.
+        
+        self.startXY = pos_x, pos_y  # сохраняем стартовые координаты.
+
+        # Draw separate line.
+        self.draw_line(pos_x, pos_y)
 
         # Draw is step-to-step for stars on screen.
         for line in self.matrix:
@@ -98,20 +101,45 @@ class Field():
             # Draw block.
             self.draw_star_block(pos_x, pos_y)
 
-            # Draw separate line.
-            self.draw_line(pos_x, pos_y)
 
             # Animated draw.
-            pygame.time.delay(5)
+            pygame.time.delay(10)
             pygame.display.update()
 
-            pos_x += self.block_margin
+
+    def startPosStar(self, ID_X, ID_Y):
+        """Получить стартовые координаты звезды."""
+        X = self.startXY[0]
+        Y = self.startXY[1]
+        
+        for i_x in range(ID_X):
+            X += self.block_margin
+            
+            for i_y in range(ID_Y):
+                Y += self.block_margin
+
+        return X, Y
 
 
-    def add_Star(self, x, y, colorID):
-        self.matrix[x][y] = Star(colorID, coordsXY(x, y))
+    def createStar(self, colorID, coord_XY):
+        """Добавляет объект звезды в поле."""
+        X = coord_XY[0]
+        Y = coord_XY[1]
 
+        return Star(colorID, self.startPosStar(X, Y))
 
+    def searchFreeCell(self):
+        search = True
+
+        while search:
+            string = random.choice(self.matrix)
+            star = random.choice(string)
+
+            if star.colorID == 0:
+                pass
+    
     @staticmethod
-    coordsXY(x, y):
+    def randomColor():
+        """Генерирует рандомный цвет."""
+        return random.randint(1, 7)
 

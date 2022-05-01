@@ -24,7 +24,8 @@ class CLines():
         self.mainScreen.blit(self.win_bgrd, (0,0))  # fill background.
         self.field.draw(self.win_size)
         
-        self
+        color_list = [self.randomColor for i in range(3)]  # create colors list.
+        
 
         while run:
             # Main cycle of APP.
