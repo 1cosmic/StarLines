@@ -6,22 +6,17 @@ from stars import Star
 class Field():
     def __init__(self, screen):
         self.screen = screen
+        
+        # Create matrix of star-object.
         self.matrix = [[0] * 9 for i in range(9)]
-        self.free_matrix = [[i] * 9 for i in range(9)]
 
-        # Самым оптимальным будет помещение звезды как айдишник в поле выше.
-        # Таким образом, обращаясь к определённому индексу в матрице, мы
-        # сможем зафиксировать её жёсткое положение на игровом поле, изменить
-        # фон звезды и прочее.
-        #
-        # Сделать по матрице:
-        # 1. Сделать что-то в роде рамок / полок и прочего для звёзд.
-        # 3. Добавить поле "color_id" для последующей связки звезда - ячейка.
-        #
-        # Сделать по звёздам:
-        # 1. Гифки (спрайты) для 7 цветов звезд.
-        # 2. Механизм выбора и перемещения звезд.
-        #
+        # And inizialize it!
+        for y in range(9):
+            for x in range(9):
+                self.createStar(y, x)
+        
+        # For check of free cell in matrix.
+        self.free_matrix = [[i] * 9 for i in range(9)]
 
 
     def draw_star_block(self, pos_x, pos_y):
@@ -110,11 +105,10 @@ class Field():
     def startPosStar(self, ID_X, ID_Y):
         """Получить стартовые координаты звезды."""
         X = self.startXY[0]
-        Y = self.startXY[1]
-        
-        for i_x in range(ID_X):
+        Y = self.startXY[1] 
+       
+        for i_x in range(ID_X): 
             X += self.block_margin
-            
             for i_y in range(ID_Y):
                 Y += self.block_margin
 
@@ -128,18 +122,23 @@ class Field():
 
         return Star(colorID, self.startPosStar(X, Y))
 
-    def searchFreeCell(self):
-        search = True
 
-        while search:
-            string = random.choice(self.matrix)
-            star = random.choice(string)
+    def randomFreeCell(self):
+        """Return x & y of free cell in matrix."""
+        
+        # Create randomize list of string.
+        randomStr = random.sample(self.free_matrix, len(self.free_matrix))
+        # If string non free, lets go to next str!
+        for string in randomStr:
+            if len(string) != 0:
 
-            if star.colorID == 0:
-                pass
-    
-    @staticmethod
-    def randomColor():
-        """Генерирует рандомный цвет."""
-        return random.randint(1, 7)
+                cell = random.choice(string)
+                string.remove(cell)
+                string = self.free_matrix.index(string)  # re-write value.
 
+
+    def crtRandomStar(self, count):
+        """Place random Star in random cell x-count."""
+
+        for i in count:
+            pass

@@ -1,3 +1,4 @@
+import random
 import pygame
 import os
 
@@ -38,3 +39,10 @@ class CLines():
 
         else:
             print("Game was close")
+
+    @staticmethod
+    def randomColor(colorList):
+        """Generate list with 3-e random colors."""
+        return [random.randint(1, 7) * 3]
+
+
