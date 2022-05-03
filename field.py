@@ -4,19 +4,31 @@ import pygame
 from stars import Star
 
 class Field():
-    def __init__(self, screen):
+    def __init__(self, screen, win_size):
         self.screen = screen
         
+        self.block_w = 60
+        self.line_w = 2
+        self.space = 6
+
+        self.block_margin = self.block_w + self.space
+        self.line_l = self.block_margin * 9
+
+        pos_x = (win_size[0] - self.line_l) / 2
+        pos_y = (win_size[1] - self.line_l) / 2  # set up start position.
+        
+        self.startXY = (pos_x, pos_y)  # сохраняем стартовые координаты.
+
         # Create matrix of star-object.
         self.matrix = [[0] * 9 for i in range(9)]
 
         # And inizialize it!
         for y in range(9):
             for x in range(9):
-                self.createStar(y, x)
+                self.matrix[y][x] = Star(0, self.startPosStar(x, y))
         
         # For check of free cell in matrix.
-        self.free_matrix = [[i] * 9 for i in range(9)]
+        self.free_matrix = [[i for i in range(9)] * 9]
 
 
     def draw_star_block(self, pos_x, pos_y):
@@ -34,8 +46,10 @@ class Field():
         pygame.draw.rect(self.screen, bg, __block_pos)
 
 
-    def draw_line(self, start_x, start_y):
+    def draw_line(self):
         """Draw line, who separate to stars."""
+        start_x = self.startXY[0]
+        start_y = self.startXY[1]
 
         start_x += 2  # set up currect coorditates of first line (bug fix).
 
@@ -75,31 +89,17 @@ class Field():
     def draw(self, win_size):
         """Draw field in surface."""
 
-        self.block_w = 60
-        self.line_w = 2
-        self.space = 6
-
-        self.block_margin = self.block_w + self.space
-        self.line_l = self.block_margin * 9
-
-        pos_x = (win_size[0] - self.line_l) / 2
-        pos_y = (win_size[1] - self.line_l) / 2  # set up start position.
-        
-        self.startXY = pos_x, pos_y  # сохраняем стартовые координаты.
-
         # Draw separate line.
-        self.draw_line(pos_x, pos_y)
+        self.draw_line()
 
         # Draw is step-to-step for stars on screen.
-        for line in self.matrix:
+        # for line in self.matrix:
 
             # Draw block.
-            self.draw_star_block(pos_x, pos_y)
-
 
             # Animated draw.
-            pygame.time.delay(10)
-            pygame.display.update()
+            # pygame.time.delay(10)
+            # pygame.display.update()
 
 
     def startPosStar(self, ID_X, ID_Y):
@@ -112,15 +112,8 @@ class Field():
             for i_y in range(ID_Y):
                 Y += self.block_margin
 
+        print("Координаты: ", X, Y)
         return X, Y
-
-
-    def createStar(self, colorID, coord_XY):
-        """Добавляет объект звезды в поле."""
-        X = coord_XY[0]
-        Y = coord_XY[1]
-
-        return Star(colorID, self.startPosStar(X, Y))
 
 
     def randomFreeCell(self):
@@ -136,9 +129,18 @@ class Field():
                 string.remove(cell)
                 string = self.free_matrix.index(string)  # re-write value.
 
+                print("Рандомная ячейка: ", string, cell)
+                return string, cell
 
-    def crtRandomStar(self, count):
-        """Place random Star in random cell x-count."""
 
-        for i in count:
-            pass
+    def crtRandomStar(self):
+        """Добавляет объект звезды в поле."""
+        colorID = random.randint(1, 7)
+        randomXY = self.randomFreeCell()
+        X = randomXY[0]
+        Y = randomXY[1]
+
+        self.matrix[X][Y] = Star(colorID, self.startPosStar(X, Y))
+        self.matrix[X][Y].draw(self.screen)
+
+        print("Создана звезда.")

@@ -4,6 +4,7 @@ import os
 
 from field import Field
 
+
 class CLines():
 
     def __init__(self):
@@ -17,22 +18,23 @@ class CLines():
 
         self.start_pos = ((800 - (9 * 50) / 2), (600 - (9 * 50) / 2))
 
-        self.field = Field(self.mainScreen)
-
+        self.field = Field(self.mainScreen, self.win_size)
 
     def run(self):
         run = True
-        self.mainScreen.blit(self.win_bgrd, (0,0))  # fill background.
+        self.mainScreen.blit(self.win_bgrd, (0, 0))  # fill background.
         self.field.draw(self.win_size)
-        
+
         color_list = [self.randomColor for i in range(3)]  # create colors list.
-        
 
         while run:
             # Main cycle of APP.
             for event in pygame.event.get():
-                if event.type == pygame.QUIT: run = False
-
+                if event.type == pygame.QUIT:
+                    run = False
+                elif event.type == pygame.KEYDOWN:
+                    if pygame.key.get_pressed()[pygame.K_SPACE]:
+                        self.field.crtRandomStar()
 
             pygame.display.flip()  # last frame.
             pygame.time.delay(100)  # lock of the speed.
@@ -44,5 +46,3 @@ class CLines():
     def randomColor(colorList):
         """Generate list with 3-e random colors."""
         return [random.randint(1, 7) * 3]
-
-

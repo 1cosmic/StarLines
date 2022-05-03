@@ -2,14 +2,13 @@ import pygame
 
 class Star():
     def __init__(self, colorID, coords):
-        
-        if colorID == None:
-            self.colorID = 0
-        else:
-            self.colorID = colorID  # color ID.
 
-        self.coords = coords  # coords position of screen.
-        if colorID == 1: 
+        self.colorID = colorID  # color ID.
+        
+        self.coord_X = coords[0]  # coords position of screen.
+        self.coord_Y = coords[1]  # coords position of screen.
+
+        if colorID == 1:
             self.color = (255, 0, 0)      # red.
         elif colorID == 2: 
             self.color = (255, 200, 0)     # orange.
@@ -25,4 +24,6 @@ class Star():
             self.color = (255, 0, 255)     # puple.
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.coords)
+        __rect = self.coord_X, self.coord_Y, 60, 60
+        print(__rect)
+        pygame.draw.rect(screen, self.color, __rect)
