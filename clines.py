@@ -35,6 +35,7 @@ class CLines():
                 elif event.type == pygame.KEYDOWN:
                     if pygame.key.get_pressed()[pygame.K_SPACE]:
                         self.field.crtRandomStar()
+                        self.field.fullCheckLines()
 
             pygame.display.flip()  # last frame.
             pygame.time.delay(100)  # lock of the speed.

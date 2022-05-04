@@ -25,5 +25,4 @@ class Star():
 
     def draw(self, screen):
         __rect = self.coord_X, self.coord_Y, 60, 60
-        print(__rect)
         pygame.draw.rect(screen, self.color, __rect)
