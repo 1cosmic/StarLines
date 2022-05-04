@@ -28,7 +28,7 @@ class Field():
                 self.matrix[y][x] = Star(0, self.startPosStar(x, y))
         
         # For check of free cell in matrix.
-        self.free_matrix = [[i for i in range(9)] * 9]
+        self.free_matrix = [[i for i in range(9)] for i2 in range(9)]
 
 
     def draw_star_block(self, pos_x, pos_y):
@@ -109,8 +109,8 @@ class Field():
        
         for i_x in range(ID_X): 
             X += self.block_margin
-            for i_y in range(ID_Y):
-                Y += self.block_margin
+        for i_y in range(ID_Y):
+            Y += self.block_margin
 
         print("Координаты: ", X, Y)
         return X, Y
@@ -120,17 +120,18 @@ class Field():
         """Return x & y of free cell in matrix."""
         
         # Create randomize list of string.
-        randomStr = random.sample(self.free_matrix, len(self.free_matrix))
-        # If string non free, lets go to next str!
-        for string in randomStr:
-            if len(string) != 0:
+        run = True
+        while run:
+            randomStrID = random.randint(0, 8)
+            randomStr = self.free_matrix[randomStrID]
 
-                cell = random.choice(string)
-                string.remove(cell)
-                string = self.free_matrix.index(string)  # re-write value.
+            if len(randomStr):
+                randomCell = random.choice(randomStr)
+                self.free_matrix[randomStrID].remove(randomCell)
 
-                print("Рандомная ячейка: ", string, cell)
-                return string, cell
+
+                print("Рандомная ячейка: ", randomStrID, randomCell)
+                return randomStrID, randomCell
 
 
     def crtRandomStar(self):
