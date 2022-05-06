@@ -154,26 +154,28 @@ class Field():
 
                 STR_cur = self.matrix[x][y].colorID
                 if STR_cur != 0:
-                    STR_last_color = STR_cur
-                    if STR_last_color == self.matrix[x][y]:
+                    if STR_last_color == STR_cur:
                         STR_counter += 1
-                        print(STR_counter)
                         if STR_start == 0:
                             STR_start = y
-                else:
-                    STR_counter = 0
-                    STR_start = 0
+
+                    else:
+                        STR_counter = 0
+                        STR_start = 0
+
+                STR_last_color = STR_cur
 
                 CLMN_cur = self.matrix[y][x].colorID
                 if CLMN_cur != 0:
-                    CLMN_last_color = CLMN_cur
-                    if CLMN_last_color == self.matrix[y][x]:
+                    if CLMN_last_color == CLMN_cur:
                         CLMN_counter += 1
                         if CLMN_start == 0:
                             CLMN_start = x
-                else:
-                    CLMN_counter = 0
-                    CLMN_start = 0
+                    else:
+                        CLMN_counter = 0
+                        CLMN_start = 0
+
+                CLMN_last_color = CLMN_cur
 
                 self.matrix[x][y] = Star(random.randint(1, 7), self.startPosStar(x, y))
                 self.matrix[x][y].draw(self.screen)

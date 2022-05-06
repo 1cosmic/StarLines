@@ -29,16 +29,19 @@ class CLines():
 
         while run:
             # Main cycle of APP.
+            mouse_pos = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
                     if pygame.key.get_pressed()[pygame.K_SPACE]:
                         self.field.crtRandomStar()
                         self.field.fullCheckLines()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    print(mouse_pos)
 
             pygame.display.flip()  # last frame.
-            pygame.time.delay(100)  # lock of the speed.
+            # pygame.time.delay(100)  # lock of the speed.
 
         else:
             print("Game was close")
